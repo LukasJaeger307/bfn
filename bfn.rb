@@ -20,6 +20,9 @@
 # Requires YAML for serializing
 require 'yaml'
 
+# Requires Optparse for command line arguments
+require 'optparse'
+
 SETTINGS_FOLDER = Dir.home() + "/.bfn"
 FEEDINFO_FILE = SETTINGS_FOLDER + "/feedinfo.yaml"
 
@@ -38,3 +41,32 @@ end
 
 # De-Serializing feedinfo from the feedinfo-file
 feedInfo = YAML.load(File.read(FEEDINFO_FILE))
+
+# Parsing command line options
+OptionParser.new do |parser|
+	#parser.banner("Usage: bfn.rb --add URL\n
+	#							bfn.rb --remove \n
+#								bfn.rb --list \n
+#								bfn.rb ")
+
+	# Adding a new URL to the feedinfo
+	parser.on("-a", "--add URL",
+					"Adds an RSS-feed with URL to the list") do |url|
+		#TODO: Add functionality
+		puts "You added #{url}!"
+	end
+	
+	# Removing an URL from feedinfo
+	parser.on("-r", "--remove",
+					 "Removes an RSS-feed you may select from the lost") do
+		#TODO: Add functionality
+		puts "You wanna remove something"
+	end
+
+	# Listing all entries in feedinfo
+	parser.on("-l", "--list",
+						"Lists all news sources") do
+		#TODO: Add functionality
+		puts "You want to list all news sources"
+	end
+end.parse!
