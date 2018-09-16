@@ -23,8 +23,8 @@ require 'yaml'
 # Requires Optparse for command line arguments
 require 'optparse'
 
-# Requires FeedinfoEntry for entries to feedinfo
-require_relative 'FeedinfoEntry' 
+# Requires Feedinfo for a model for feedinfo
+require_relative 'Feedinfo' 
 
 SETTINGS_FOLDER = Dir.home() + "/.bfn"
 FEEDINFO_FILE = SETTINGS_FOLDER + "/feedinfo.yaml"
@@ -47,7 +47,7 @@ feedinfo = YAML.load(File.read(FEEDINFO_FILE))
 
 # Checking for an empty file
 if feedinfo == false
-	feedinfo = Set.new
+	feedinfo = Feedinfo.new
 end
 
 # Parsing command line options
@@ -61,7 +61,7 @@ OptionParser.new do |parser|
 	parser.on("-a", "--add URL",
 					"Adds an RSS-feed with URL to the list") do |url|
 		#TODO: Add functionality
-		feedinfo.add(FeedinfoEntry.new(url))
+		feedinfo.addEntry(FeedinfoEntry.new(url))
 	end
 	
 	# Removing an URL from feedinfo
