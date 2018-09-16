@@ -36,10 +36,7 @@ class FeedinfoEntry
 		@date = Time.at(0)
 	end
 
-	#def initialize(name, url)
-#		@name = name
-#		@url = url
-#		@date = Time.at(0)
-#	end
-
+	def to_s
+		"#@name : #@url"
+	end
 end

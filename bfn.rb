@@ -60,7 +60,6 @@ OptionParser.new do |parser|
 	# Adding a new URL to the feedinfo
 	parser.on("-a", "--add URL",
 					"Adds an RSS-feed with URL to the list") do |url|
-		#TODO: Add functionality
 		feedinfo.addEntry(FeedinfoEntry.new(url))
 	end
 	
@@ -74,8 +73,9 @@ OptionParser.new do |parser|
 	# Listing all entries in feedinfo
 	parser.on("-l", "--list",
 						"Lists all news sources") do
-		#TODO: Add functionality
-		puts "You want to list all news sources"
+		feedinfo.feedinfo.each do |x|
+			puts x.to_s
+		end
 	end
 end.parse!
 

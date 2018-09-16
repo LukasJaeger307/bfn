@@ -18,7 +18,8 @@
 require_relative 'FeedinfoEntry'
 
 class Feedinfo
-	
+
+	attr :feedinfo	
 	def initialize()
 		@feedinfo = Set.new
 	end
