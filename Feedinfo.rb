@@ -37,4 +37,8 @@ class Feedinfo
 			return false
 		end
 	end
+
+	def deleteEntry(entry)
+		@feedinfo.delete(entry)
+	end
 end

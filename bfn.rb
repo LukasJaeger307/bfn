@@ -66,8 +66,21 @@ OptionParser.new do |parser|
 	# Removing an URL from feedinfo
 	parser.on("-r", "--remove",
 					 "Removes an RSS-feed you may select from the lost") do
-		#TODO: Add functionality
-		puts "You wanna remove something"
+		puts "Insert the number of the source you wish to remove:"
+		counter = 0
+		entryArray = Array.new
+		feedinfo.feedinfo.each do |entry|
+			puts (counter.to_s + " : " + entry.to_s)
+			entryArray.append(entry)
+			counter = counter + 1
+		end
+		selection = gets.chomp.to_i
+		if selection >= entryArray.size or selection < 0
+			puts "You can't select that number, moron!"
+		else
+			feedinfo.deleteEntry(entryArray.at(selection))
+		end
+
 	end
 
 	# Listing all entries in feedinfo
