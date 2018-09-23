@@ -61,11 +61,12 @@ OptionParser.new do |parser|
 	parser.on("-a", "--add URL",
 					"Adds an RSS-feed with URL to the list") do |url|
 		feedinfo.addEntry(FeedinfoEntry.new(url))
+		exit(0)
 	end
 	
 	# Removing an URL from feedinfo
 	parser.on("-r", "--remove",
-					 "Removes an RSS-feed you may select from the lost") do
+					 "Removes an RSS-feed you may select from the list") do
 		puts "Insert the number of the source you wish to remove:"
 		counter = 0
 		entryArray = Array.new
@@ -77,10 +78,11 @@ OptionParser.new do |parser|
 		selection = gets.chomp.to_i
 		if selection >= entryArray.size or selection < 0
 			puts "You can't select that number, moron!"
+			exit(1)
 		else
 			feedinfo.deleteEntry(entryArray.at(selection))
 		end
-
+		exit(0)
 	end
 
 	# Listing all entries in feedinfo
@@ -89,8 +91,31 @@ OptionParser.new do |parser|
 		feedinfo.feedinfo.each do |x|
 			puts x.to_s
 		end
+		exit(0)
 	end
 end.parse!
+
+newsItems = Set.new
+
+# Getting the news
+feedinfo.feedinfo.each do |entry|
+	open(entry.url) do |rss|
+		feed = RSS::Parser.parse(rss)
+		puts "Title: #{feed.channel.title}"
+		feed.items.select{|x| x.date > entry.date}.each do |x|
+			puts "#{x.title}"
+			userWillRead = gets().chomp
+			if userWillRead == "y"
+				newsItems.add(x)
+			end
+		end
+	end
+end
+
+# Printing them
+newsItems.each do |item|
+	puts "#{item.title}"
+end
 
 # Serializing and storing feedinfo before end
 File.open(FEEDINFO_FILE, "w") do |file|
