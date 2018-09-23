@@ -26,6 +26,9 @@ require 'optparse'
 # Requires Feedinfo for a model for feedinfo
 require_relative 'Feedinfo' 
 
+# Requires Webpage loader
+require_relative 'WebpageLoader'
+
 SETTINGS_FOLDER = Dir.home() + "/.bfn"
 FEEDINFO_FILE = SETTINGS_FOLDER + "/feedinfo.yaml"
 
@@ -114,7 +117,8 @@ end
 
 # Printing them
 newsItems.each do |item|
-	puts "#{item.title}"
+	loader = WebpageLoader.new(item.link)
+	puts loader.load
 end
 
 # Serializing and storing feedinfo before end
