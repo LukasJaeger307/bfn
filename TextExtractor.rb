@@ -15,23 +15,33 @@
 # You should have received a copy of the GNU General Public License
 # along with bfn.  If not, see <http://www.gnu.org/licenses/>.
 
-# Requires open-uri in order to download pages
-require 'open-uri'
+# Requires nokogiri for xpath based text extraction
 require 'nokogiri'
-require_relative 'TextExtractor'
 
-class WebpageLoader
-	
-	attr :url
-	
-	def initialize(url)
-		@url = url
-		@extractor = TextExtractor.new
+class TextExtractor
+
+	def extract (doc)
+		paragraphs = doc.xpath("//h1 | //h2 | //p[@class=\"text small\"]")
+		text = Array.new
+		paragraphs.each do |paragraph|
+			if paragraph.name == "h1"
+				title = "# " + paragraph.children[1] + ": " + paragraph.children[3] + " #\n\n"
+				text.append(title)
+			# Sub-headline found
+			elsif paragraph.name == "h2"
+				paragraph.children.each do |child|
+					text.append("## " + child.text + " ##")
+					text.append("\n\n")
+				end
+			# Paragraph found
+			elsif paragraph.name == "p"
+				paragraph.children.each do |child|
+					text.append(child.text)
+					text.append("\n\n")
+				end
+			end
+		end
+		text
 	end
-
-	def load
-		doc = Nokogiri::HTML(open(@url))
-		@extractor.extract(doc)
-	end
-
 end
+

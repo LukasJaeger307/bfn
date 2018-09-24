@@ -116,11 +116,14 @@ feedinfo.feedinfo.each do |entry|
 end
 
 # Printing them
-newsItems.each do |item|
-	loader = WebpageLoader.new(item.link)
-	puts loader.load
+File.open("page.txt", "w") do |file|
+	newsItems.each do |item|
+		loader = WebpageLoader.new(item.link)
+		loader.load().each do |line|
+			file.write(line)
+		end
+	end
 end
-
 # Serializing and storing feedinfo before end
 File.open(FEEDINFO_FILE, "w") do |file|
 	file.puts(feedinfo.to_yaml)
