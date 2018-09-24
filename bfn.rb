@@ -53,6 +53,8 @@ if feedinfo == false
 	feedinfo = Feedinfo.new
 end
 
+showAll = false
+
 # Parsing command line options
 OptionParser.new do |parser|
 	#parser.banner("Usage: bfn.rb --add URL\n
@@ -96,6 +98,11 @@ OptionParser.new do |parser|
 		end
 		exit(0)
 	end
+
+	parser.on("-a", "--all",
+						"Shows all RSS entries") do
+		showAll = true
+	end
 end.parse!
 
 newsItems = Set.new
@@ -105,7 +112,7 @@ feedinfo.feedinfo.each do |entry|
 	open(entry.url) do |rss|
 		feed = RSS::Parser.parse(rss)
 		puts "Title: #{feed.channel.title}"
-		feed.items.select{|x| x.date > entry.date}.each do |x|
+		feed.items.select{|x| showAll || (x.date > entry.date)}.each do |x|
 			puts "#{x.title}"
 			userWillRead = gets().chomp
 			if userWillRead == "y"
@@ -113,6 +120,7 @@ feedinfo.feedinfo.each do |entry|
 			end
 		end
 	end
+	entry.date = Time.now
 end
 
 # Printing them
