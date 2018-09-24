@@ -21,7 +21,7 @@ require 'nokogiri'
 class TextExtractor
 
 	def extract (doc)
-		paragraphs = doc.xpath("//h1 | //h2 | //p[@class=\"text small\"]")
+		paragraphs = doc.xpath("//h1 | //h2[@class!=\"hidden\"] | //p[@class=\"text small\"]")
 		text = Array.new
 		paragraphs.each do |paragraph|
 			if paragraph.name == "h1"

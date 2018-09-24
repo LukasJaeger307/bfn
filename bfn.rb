@@ -124,7 +124,7 @@ feedinfo.feedinfo.each do |entry|
 end
 
 # Printing them
-File.open("page.txt", "w") do |file|
+File.open("bfn_news.txt", "w") do |file|
 	newsItems.each do |item|
 		loader = WebpageLoader.new(item.link)
 		loader.load().each do |line|
