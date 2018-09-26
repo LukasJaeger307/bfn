@@ -15,27 +15,15 @@
 # You should have received a copy of the GNU General Public License
 # along with bfn.  If not, see <http://www.gnu.org/licenses/>.
 
-# Requires open-uri in order to download pages
-require 'open-uri'
-require 'nokogiri'
-require_relative 'TextExtractor'
 
-class WebpageLoader
-	
-	attr :url
-	
-	def initialize(url)
-		@url = url
-		@extractor = TextExtractor.new
-	end
+class TextExtractionInformation
 
-	def load(feedinfo)
-		begin
-			doc = Nokogiri::HTML(open(@url))
-		rescue URI::InvalidURIError
-			doc = Nokogiri::HTML(open(URI.escape(@url)))
-		end
-		@extractor.extract(doc, feedinfo)
+	attr :xpath
+	attr :name
+
+	def initialize(xpath, name)
+		@name = name
+		@xpath = xpath
 	end
 
 end

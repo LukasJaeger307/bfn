@@ -55,6 +55,13 @@ end
 
 showAll = false
 
+def storeFeedinfo(feedinfo)
+	# Serializing and storing feedinfo before end
+	File.open(FEEDINFO_FILE, "w") do |file|
+		file.puts(feedinfo.to_yaml)
+	end
+end
+
 # Parsing command line options
 OptionParser.new do |parser|
 	#parser.banner("Usage: bfn.rb --add URL\n
@@ -66,6 +73,7 @@ OptionParser.new do |parser|
 	parser.on("-a", "--add URL",
 					"Adds an RSS-feed with URL to the list") do |url|
 		feedinfo.addEntry(FeedinfoEntry.new(url))
+		storeFeedinfo(feedinfo)
 		exit(0)
 	end
 	
@@ -87,6 +95,7 @@ OptionParser.new do |parser|
 		else
 			feedinfo.deleteEntry(entryArray.at(selection))
 		end
+		storeFeedinfo(feedinfo)
 		exit(0)
 	end
 
@@ -99,13 +108,13 @@ OptionParser.new do |parser|
 		exit(0)
 	end
 
-	parser.on("-a", "--all",
+	parser.on("-e", "--entry",
 						"Shows all RSS entries") do
 		showAll = true
 	end
 end.parse!
 
-newsItems = Set.new
+newsItems = Hash.new
 
 # Getting the news
 feedinfo.feedinfo.each do |entry|
@@ -116,7 +125,7 @@ feedinfo.feedinfo.each do |entry|
 			puts "#{x.title}"
 			userWillRead = gets().chomp
 			if userWillRead == "y"
-				newsItems.add(x)
+				newsItems[x] = entry
 			end
 		end
 	end
@@ -125,14 +134,12 @@ end
 
 # Printing them
 File.open("bfn_news.txt", "w") do |file|
-	newsItems.each do |item|
+	newsItems.each do |item, feedinfo|
 		loader = WebpageLoader.new(item.link)
-		loader.load().each do |line|
+		loader.load(feedinfo).each do |line|
 			file.write(line)
 		end
 	end
 end
-# Serializing and storing feedinfo before end
-File.open(FEEDINFO_FILE, "w") do |file|
-	file.puts(feedinfo.to_yaml)
-end
+
+storeFeedinfo(feedinfo)

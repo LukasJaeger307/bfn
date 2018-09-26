@@ -20,21 +20,25 @@ require 'nokogiri'
 
 class TextExtractor
 
-	def extract (doc)
-		paragraphs = doc.xpath("//h1 | //h2[@class!=\"hidden\"] | //p[@class=\"text small\"]")
+	def extract (doc, feedinfo)
+		xpathString = feedinfo.articleTitle.xpath + " | " +
+			feedinfo.sectionTitle.xpath + " | " +
+			feedinfo.paragraph.xpath
+
+		paragraphs = doc.xpath(xpathString)
 		text = Array.new
 		paragraphs.each do |paragraph|
-			if paragraph.name == "h1"
+			if paragraph.name == feedinfo.articleTitle.name
 				title = "# " + paragraph.children[1] + ": " + paragraph.children[3] + " #\n\n"
 				text.append(title)
 			# Sub-headline found
-			elsif paragraph.name == "h2"
+			elsif paragraph.name == feedinfo.sectionTitle.name
 				paragraph.children.each do |child|
 					text.append("## " + child.text + " ##")
 					text.append("\n\n")
 				end
 			# Paragraph found
-			elsif paragraph.name == "p"
+			elsif paragraph.name == feedinfo.paragraph.name
 				paragraph.children.each do |child|
 					text.append(child.text)
 					text.append("\n\n")

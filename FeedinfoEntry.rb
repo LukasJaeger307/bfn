@@ -20,6 +20,8 @@
 require 'rss'
 require 'open-uri'
 
+require_relative 'TextExtractionInformation'
+
 class FeedinfoEntry
 	# Name and URL of the feed	
 	attr :name
@@ -27,6 +29,9 @@ class FeedinfoEntry
 
 	# Date of last access
 	attr :date, true
+	attr :articleTitle, true
+	attr :sectionTitle, true
+	attr :paragraph, true
 
 	def initialize(url)
 		rss = open(url)
@@ -34,6 +39,9 @@ class FeedinfoEntry
 		@name = feed.channel.title
 		@url = url
 		@date = Time.at(0)
+		@articleTitle = TextExtractionInformation.new("//h1","h1")
+		@sectionTitle = TextExtractionInformation.new("//h2[@class!=\"hidden\"]", "h2")
+		@paragraph = TextExtractionInformation.new("//p[@class=\"text small\"]", "p")	
 	end
 
 	def to_s
