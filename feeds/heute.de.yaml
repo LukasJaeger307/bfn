@@ -1,0 +1,13 @@
+--- !ruby/object:FeedinfoEntry
+name: heute
+url: https://www.zdf.de/rss/zdf/nachrichten
+date: 2018-09-28 22:55:06.011638877 +02:00
+articleTitle: !ruby/object:TextExtractionInformation
+  name: span
+  xpath: //span[@class="no-link"]
+sectionTitle: !ruby/object:TextExtractionInformation
+  name: h3
+  xpath: //h3[@class="small-headline"]
+paragraph: !ruby/object:TextExtractionInformation
+  name: p
+  xpath: //div[@class="b-post-content x-news"]//p

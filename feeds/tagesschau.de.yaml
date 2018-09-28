@@ -1,0 +1,13 @@
+--- !ruby/object:FeedinfoEntry
+name: tagesschau.de - Die Nachrichten der ARD
+url: https://www.tagesschau.de/xml/rss2
+date: 2018-09-28 22:55:07.123681271 +02:00
+articleTitle: !ruby/object:TextExtractionInformation
+  name: h1
+  xpath: "//h1"
+sectionTitle: !ruby/object:TextExtractionInformation
+  name: h2
+  xpath: //h2[@class!="hidden"]
+paragraph: !ruby/object:TextExtractionInformation
+  name: p
+  xpath: //p[@class="text small"]
