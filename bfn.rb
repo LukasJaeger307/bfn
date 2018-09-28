@@ -88,19 +88,8 @@ end
 
 # Parsing command line options
 OptionParser.new do |parser|
-	#parser.banner("Usage: bfn.rb --add URL\n
-	#							bfn.rb --remove \n
-#								bfn.rb --list \n
-#								bfn.rb ")
+	parser.banner = "Usage: bfn.rb [options]"
 
-	# Adding a new URL to the feedinfo
-#	parser.on("-a", "--add URL",
-#					"Adds an RSS-feed with URL to the list") do |url|
-#		feedinfo.addEntry(FeedinfoEntry.new(url))
-#		storeFeedinfo(feedinfo)
-	#	exit(0)
-	#end
-	
 	# Configuring a new source
 	parser.on("-c", "--create",
 						"Creates a new source in interactive mode") do
