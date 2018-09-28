@@ -61,24 +61,32 @@ if feedinfo == false
 	feedinfo = Feedinfo.new
 end
 
+# Sets whether or not all entries of a feed are shown
 showAll = false
 
+# Function that makes the user select a feed interactively
 def selectFeed(feedinfo)
 	counter = 0
 	entryArray = Array.new
+	
+	# Prints a list of all feeds
 	feedinfo.feedinfo.each do |entry|
 		puts (counter.to_s + " : " + entry.to_s)
 		entryArray.append(entry)
 		counter = counter + 1
 	end
+	
+	# Gets the feed
 	selection = gets.chomp.to_i
 	if selection >= entryArray.size or selection < 0
+		# No feed found, returning nil
 		return nil
 	else
 		entryArray.at(selection)
 	end
 end
 
+# Stores the feedinfo file in the home folder
 def storeFeedinfo(feedinfo)
 	# Serializing and storing feedinfo before end
 	File.open(FEEDINFO_FILE, "w") do |file|
@@ -90,7 +98,7 @@ end
 OptionParser.new do |parser|
 	parser.banner = "Usage: bfn.rb [options]"
 
-	# Configuring a new source
+	# Creating a new source interactively
 	parser.on("-c", "--create",
 						"Creates a new source in interactive mode") do
 		feedinfo.addEntry(FeedCreator.new.create())
@@ -122,11 +130,13 @@ OptionParser.new do |parser|
 		exit(0)
 	end
 
-	parser.on("-a", "--add",
+	# Listing all news in all feeds
+	parser.on("-a", "--all",
 						"Shows all RSS entries") do
 		showAll = true
 	end
 
+	# Exporting a news feed
 	parser.on("-e", "--export",
 						"Exports a news source") do
 		puts "Insert the number of the source you wish to export:"
@@ -145,6 +155,7 @@ OptionParser.new do |parser|
 		exit(0)
 	end
 
+	# Importing a news feed
 	parser.on("-i", "--import FILENAME",
 					"Imports a news feed") do |filename|
 		if not File.exist?(filename)
@@ -190,4 +201,5 @@ File.open("bfn_news.txt", "w") do |file|
 	end
 end
 
+# Storing the feedinfo before the program ends
 storeFeedinfo(feedinfo)
