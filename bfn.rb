@@ -128,12 +128,12 @@ OptionParser.new do |parser|
 		exit(0)
 	end
 
-	parser.on("-e", "--entry",
+	parser.on("-a", "--add",
 						"Shows all RSS entries") do
 		showAll = true
 	end
 
-	parser.on("-x", "--export",
+	parser.on("-e", "--export",
 						"Exports a news source") do
 		puts "Insert the number of the source you wish to export:"
 		selection = selectFeed(feedinfo)
@@ -148,6 +148,22 @@ OptionParser.new do |parser|
 				file.puts(selection.to_yaml)
 			end
 		end
+		exit(0)
+	end
+
+	parser.on("-i", "--import FILENAME",
+					"Imports a news feed") do |filename|
+		if not File.exist?(filename)
+			puts("Could not find file")
+			exit(1)
+		end
+		begin
+			feed = YAML.load(File.read(filename))
+			feedinfo.addEntry(feed)
+		rescue
+			puts("Could not serialize file")
+		end
+		storeFeedinfo(feedinfo)
 		exit(0)
 	end
 end.parse!
