@@ -26,6 +26,7 @@ require 'optparse'
 # Requires Feedinfo for a model for feedinfo
 require_relative 'Feedinfo' 
 
+# Requires FeedCreator to create feeds
 require_relative 'FeedCreator'
 
 # Requires Webpage loader
@@ -58,7 +59,6 @@ end
 showAll = false
 
 def selectFeed(feedinfo)
-	puts "Insert the number of the source you wish to remove:"
 	counter = 0
 	entryArray = Array.new
 	feedinfo.feedinfo.each do |entry|
@@ -107,6 +107,7 @@ OptionParser.new do |parser|
 	# Removing an URL from feedinfo
 	parser.on("-r", "--remove",
 					 "Removes an RSS-feed you may select from the list") do
+		puts "Insert the number of the source you wish to remove:"
 		selection = selectFeed(feedinfo)
 		if selection == nil
 			puts "You can't select that number, moron!"
@@ -134,8 +135,19 @@ OptionParser.new do |parser|
 
 	parser.on("-x", "--export",
 						"Exports a news source") do
-		#TODO: Add code
-
+		puts "Insert the number of the source you wish to export:"
+		selection = selectFeed(feedinfo)
+		if selection == nil
+			puts "You can't select that number, moron!"
+			exit(1)
+		else
+			puts "Give me a feed name"
+			feedname = gets().chomp!
+			filename = feedname + ".yaml"
+			File.open(filename, "w") do |file|
+				file.puts(selection.to_yaml)
+			end
+		end
 		exit(0)
 	end
 end.parse!
