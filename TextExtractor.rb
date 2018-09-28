@@ -57,6 +57,7 @@ class TextExtractor
 				end
 			end
 		end
+		text.append("\n\n")
 		text
 	end
 end
