@@ -29,8 +29,12 @@ class TextExtractor
 		text = Array.new
 		paragraphs.each do |paragraph|
 			if paragraph.name == feedinfo.articleTitle.name
-				title = "# " + paragraph.children[1] + ": " + paragraph.children[3] + " #\n\n"
-				text.append(title)
+				#title = "# " + paragraph.children[1] + ": " + paragraph.children[3] + " #\n\n"
+				text.append("# ")
+				paragraph.children.each do |child|
+					text.append(child.text)
+				end
+				text.append(" #")
 			# Sub-headline found
 			elsif paragraph.name == feedinfo.sectionTitle.name
 				paragraph.children.each do |child|

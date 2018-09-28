@@ -33,15 +33,18 @@ class FeedinfoEntry
 	attr :sectionTitle, true
 	attr :paragraph, true
 
-	def initialize(url)
+	def initialize(url, articleTitle, sectionTitle, paragraph)
 		rss = open(url)
 		feed = RSS::Parser.parse(rss)
 		@name = feed.channel.title
 		@url = url
 		@date = Time.at(0)
-		@articleTitle = TextExtractionInformation.new("//h1","h1")
-		@sectionTitle = TextExtractionInformation.new("//h2[@class!=\"hidden\"]", "h2")
-		@paragraph = TextExtractionInformation.new("//p[@class=\"text small\"]", "p")	
+		@articleTitle = articleTitle
+			#TextExtractionInformation.new("//h1","h1")
+		@sectionTitle = sectionTitle
+			#TextExtractionInformation.new("//h2[@class!=\"hidden\"]", "h2")
+		@paragraph =  paragraph
+			#TextExtractionInformation.new("//p[@class=\"text small\"]", "p")	
 	end
 
 	def to_s

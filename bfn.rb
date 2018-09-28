@@ -26,6 +26,8 @@ require 'optparse'
 # Requires Feedinfo for a model for feedinfo
 require_relative 'Feedinfo' 
 
+require_relative 'FeedCreator'
+
 # Requires Webpage loader
 require_relative 'WebpageLoader'
 
@@ -70,9 +72,17 @@ OptionParser.new do |parser|
 #								bfn.rb ")
 
 	# Adding a new URL to the feedinfo
-	parser.on("-a", "--add URL",
-					"Adds an RSS-feed with URL to the list") do |url|
-		feedinfo.addEntry(FeedinfoEntry.new(url))
+#	parser.on("-a", "--add URL",
+#					"Adds an RSS-feed with URL to the list") do |url|
+#		feedinfo.addEntry(FeedinfoEntry.new(url))
+#		storeFeedinfo(feedinfo)
+	#	exit(0)
+	#end
+	
+	# Configuring a new source
+	parser.on("-c", "--create",
+						"Creates a new source in interactive mode") do
+		feedinfo.addEntry(FeedCreator.new.create())
 		storeFeedinfo(feedinfo)
 		exit(0)
 	end
