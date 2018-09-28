@@ -57,6 +57,23 @@ end
 
 showAll = false
 
+def selectFeed(feedinfo)
+	puts "Insert the number of the source you wish to remove:"
+	counter = 0
+	entryArray = Array.new
+	feedinfo.feedinfo.each do |entry|
+		puts (counter.to_s + " : " + entry.to_s)
+		entryArray.append(entry)
+		counter = counter + 1
+	end
+	selection = gets.chomp.to_i
+	if selection >= entryArray.size or selection < 0
+		return nil
+	else
+		entryArray.at(selection)
+	end
+end
+
 def storeFeedinfo(feedinfo)
 	# Serializing and storing feedinfo before end
 	File.open(FEEDINFO_FILE, "w") do |file|
@@ -90,20 +107,12 @@ OptionParser.new do |parser|
 	# Removing an URL from feedinfo
 	parser.on("-r", "--remove",
 					 "Removes an RSS-feed you may select from the list") do
-		puts "Insert the number of the source you wish to remove:"
-		counter = 0
-		entryArray = Array.new
-		feedinfo.feedinfo.each do |entry|
-			puts (counter.to_s + " : " + entry.to_s)
-			entryArray.append(entry)
-			counter = counter + 1
-		end
-		selection = gets.chomp.to_i
-		if selection >= entryArray.size or selection < 0
+		selection = selectFeed(feedinfo)
+		if selection == nil
 			puts "You can't select that number, moron!"
 			exit(1)
 		else
-			feedinfo.deleteEntry(entryArray.at(selection))
+			feedinfo.deleteEntry(selection)
 		end
 		storeFeedinfo(feedinfo)
 		exit(0)
@@ -121,6 +130,13 @@ OptionParser.new do |parser|
 	parser.on("-e", "--entry",
 						"Shows all RSS entries") do
 		showAll = true
+	end
+
+	parser.on("-x", "--export",
+						"Exports a news source") do
+		#TODO: Add code
+
+		exit(0)
 	end
 end.parse!
 
