@@ -49,7 +49,12 @@ if not File.exist?(FEEDINFO_FILE)
 end
 
 # De-Serializing feedinfo from the feedinfo-file
-feedinfo = YAML.load(File.read(FEEDINFO_FILE))
+begin
+	feedinfo = YAML.load(File.read(FEEDINFO_FILE))
+rescue
+	puts("Feedinfo file was damaged. Aborting")
+	exit(1)
+end
 
 # Checking for an empty file
 if feedinfo == false
