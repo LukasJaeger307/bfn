@@ -1,0 +1,13 @@
+--- !ruby/object:FeedinfoEntry
+name: hessenschau.de
+url: https://www.hessenschau.de/index.rss
+date: 2018-09-29 22:56:18.689385519 +02:00
+articleTitle: !ruby/object:TextExtractionInformation
+  name: h1
+  xpath: //h1[@class="breadcrumbNav__item breadcrumbNav__title"]
+sectionTitle: !ruby/object:TextExtractionInformation
+  name: h3
+  xpath: //h3[@class="text__headline copytext__headline"]
+paragraph: !ruby/object:TextExtractionInformation
+  name: p
+  xpath: //p[@class="copytext__text text__copytext"]
