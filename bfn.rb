@@ -120,22 +120,7 @@ OptionParser.new do |parser|
 		storeFeedinfo(feedinfo)
 		exit(0)
 	end
-
-	# Listing all entries in feedinfo
-	parser.on("-l", "--list",
-						"Lists all news sources") do
-		feedinfo.feedinfo.each do |x|
-			puts x.to_s
-		end
-		exit(0)
-	end
-
-	# Listing all news in all feeds
-	parser.on("-a", "--all",
-						"Shows all RSS entries") do
-		showAll = true
-	end
-
+	
 	# Exporting a news feed
 	parser.on("-e", "--export",
 						"Exports a news source") do
@@ -171,6 +156,22 @@ OptionParser.new do |parser|
 		storeFeedinfo(feedinfo)
 		exit(0)
 	end
+
+	# Listing all entries in feedinfo
+	parser.on("-l", "--list",
+						"Lists all news sources") do
+		feedinfo.feedinfo.each do |x|
+			puts x.to_s
+		end
+		exit(0)
+	end
+
+	# Listing all news in all feeds
+	parser.on("-a", "--all",
+						"Shows all RSS entries") do
+		showAll = true
+	end
+
 end.parse!
 
 newsItems = Hash.new
@@ -192,7 +193,7 @@ feedinfo.feedinfo.each do |entry|
 end
 
 # Printing them
-File.open("bfn_news.txt", "w") do |file|
+File.open("news.txt", "w") do |file|
 	newsItems.each do |item, feedinfo|
 		loader = WebpageLoader.new(item.link)
 		loader.load(feedinfo).each do |line|
