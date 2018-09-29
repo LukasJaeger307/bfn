@@ -189,7 +189,7 @@ newsItems = Hash.new
 # Getting the news
 feedinfo.feedinfo.each do |entry|
 	open(entry.url) do |rss|
-		feed = RSS::Parser.parse(rss)
+		feed = RSS::Parser.parse(rss, do_validate=false)
 		puts "Title: #{feed.channel.title}"
 		feed.items.select{|x| showAll || (x.date > entry.date)}.each do |x|
 			puts "#{x.title}"

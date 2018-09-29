@@ -35,7 +35,7 @@ class FeedinfoEntry
 
 	def initialize(url, articleTitle, sectionTitle, paragraph)
 		rss = open(url)
-		feed = RSS::Parser.parse(rss)
+		feed = RSS::Parser.parse(rss, do_validate=false)
 		@name = feed.channel.title
 		@url = url
 		@date = Time.at(0)
