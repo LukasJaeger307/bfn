@@ -64,6 +64,9 @@ end
 # Sets whether or not all entries of a feed are shown
 showAll = false
 
+# Sets the briefing mode
+briefing = false
+
 # Function that makes the user select a feed interactively
 def selectFeed(feedinfo)
 	counter = 0
@@ -172,6 +175,13 @@ OptionParser.new do |parser|
 		showAll = true
 	end
 
+	# Briefing mode opens the news with less
+	parser.on("-b", "--briefing",
+						"Briefing mode: Opens news.txt with Unix' less") do
+		briefing = true
+	end
+	parser
+
 end.parse!
 
 newsItems = Hash.new
@@ -200,6 +210,11 @@ File.open("news.txt", "w") do |file|
 			file.write(line)
 		end
 	end
+end
+
+# If briefing mode is active, open news.txt with less
+if briefing == true
+	system("less news.txt")
 end
 
 # Storing the feedinfo before the program ends
