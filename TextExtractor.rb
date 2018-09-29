@@ -43,18 +43,19 @@ class TextExtractor
 					strippedText = child.text.strip
 					if strippedText != nil
 						text.append("## " + strippedText + " ##")
-						text.append("\n\n")
 					end
 				end
+				text.append("\n\n")
 			# Paragraph found
 			elsif paragraph.name == feedinfo.paragraph.name
 				paragraph.children.each do |child|
 					strippedText = child.text.strip
 					if not strippedText.empty?
 						text.append(strippedText)
-						text.append("\n\n")
+						text.append(" ")
 					end
 				end
+				text.append("\n\n")
 			end
 		end
 		text.append("\n\n")
