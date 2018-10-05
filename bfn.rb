@@ -32,8 +32,12 @@ require_relative 'FeedCreator'
 # Requires Webpage loader
 require_relative 'WebpageLoader'
 
+#Requires word filter
+require_relative 'RSSFilter'
+
 SETTINGS_FOLDER = Dir.home() + "/.bfn"
 FEEDINFO_FILE = SETTINGS_FOLDER + "/feedinfo.yaml"
+FILTERLIST_FILE = SETTINGS_FOLDER + "/filterlist"
 
 # Checking, whether or not we have a settings folder.
 # If we don't have one, we create one.
@@ -43,9 +47,13 @@ end
 
 # Checking, whether or not the feedinfo-file is available.
 # If it is not, it is created.
-
 if not File.exist?(FEEDINFO_FILE)
 	File.open(FEEDINFO_FILE, "w"){}
+end
+
+# Doing the same thing for the filter list
+if not File.exist?(FILTERLIST_FILE)
+	File.open(FILTERLIST_FILE, "w"){}
 end
 
 # De-Serializing feedinfo from the feedinfo-file
@@ -186,12 +194,16 @@ end.parse!
 
 newsItems = Hash.new
 
+# Initializing a filter
+filter = RSSFilter.new(FILTERLIST_FILE)
+
 # Getting the news
 feedinfo.feedinfo.each do |entry|
 	open(entry.url) do |rss|
 		feed = RSS::Parser.parse(rss, do_validate=false)
 		puts "Title: #{feed.channel.title}"
-		feed.items.select{|x| showAll || (x.date > entry.date)}.each do |x|
+		filteredItems = filter.filter(feed)
+		filteredItems.select{|x| showAll || (x.date > entry.date)}.each do |x|
 			puts "#{x.title}"
 			userWillRead = gets().chomp
 			if userWillRead == "y"
