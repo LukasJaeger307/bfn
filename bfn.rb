@@ -75,6 +75,9 @@ showAll = false
 # Sets the briefing mode
 briefing = false
 
+# Wumbo
+wumbo = false
+
 # Function that makes the user select a feed interactively
 def selectFeed(feedinfo)
 	counter = 0
@@ -188,6 +191,13 @@ OptionParser.new do |parser|
 						"Briefing mode: Opens news.txt with Unix' less") do
 		briefing = true
 	end
+	
+	# Wumbo
+	parser.on("-w", "--wumbo",
+						"Wumbo") do
+		puts("Patrick, I don't think, wumbo is a real word...")
+		exit(0)
+	end	
 	parser
 
 end.parse!
