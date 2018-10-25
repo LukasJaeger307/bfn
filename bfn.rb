@@ -215,9 +215,16 @@ feedinfo.feedinfo.each do |entry|
 		filteredItems = filter.filter(feed)
 		filteredItems.select{|x| showAll || (x.date > entry.date)}.each do |x|
 			puts "#{x.title}"
-			userWillRead = gets().chomp
-			if userWillRead == "y"
+			whatToDo = gets().chomp
+			
+			# Mark an article for reading
+			if whatToDo == "y"
 				newsItems[x] = entry
+			end
+
+			# Quit the reader
+			if whatToDo == "q"
+				exit(0)
 			end
 		end
 	end
