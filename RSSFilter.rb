@@ -22,7 +22,7 @@ class RSSFilter
 	def initialize(path)
 		@filterList = []
 		File.readlines(path).each do |line|
-			filterList.append(line)
+			filterList.push(line)
 		end
 	end
 
@@ -38,7 +38,7 @@ class RSSFilter
 				end
 			end
 			if not found
-				filteredItems.append(item)
+				filteredItems.push(item)
 			end
 		end
 		filteredItems
