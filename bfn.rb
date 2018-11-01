@@ -86,7 +86,7 @@ def selectFeed(feedinfo)
 	# Prints a list of all feeds
 	feedinfo.feedinfo.each do |entry|
 		puts (counter.to_s + " : " + entry.to_s)
-		entryArray.append(entry)
+		entryArray.push(entry)
 		counter = counter + 1
 	end
 	
