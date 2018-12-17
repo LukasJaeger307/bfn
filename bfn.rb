@@ -198,7 +198,17 @@ OptionParser.new do |parser|
 		puts("Patrick, I don't think, wumbo is a real word...")
 		exit(0)
 	end	
-	parser
+
+	# Update
+	parser.on("-u", "--update",
+						"Just updates the date of last access for all sources") do
+
+		feedinfo.feedinfo.each do |entry|
+			entry.date = Time.now
+		end
+		storeFeedinfo(feedinfo)
+		exit(0)
+	end
 
 end.parse!
 
@@ -241,10 +251,11 @@ File.open("news.txt", "w") do |file|
 	end
 end
 
+# Storing the feedinfo before the program ends
+storeFeedinfo(feedinfo)
+
 # If briefing mode is active, open news.txt with less
 if briefing == true
 	system("less news.txt")
 end
 
-# Storing the feedinfo before the program ends
-storeFeedinfo(feedinfo)
