@@ -32,9 +32,15 @@ class RSSFilter
 			found = false
 			@filterList.each do |listEntry|
 				trimmedListEntry = listEntry.strip
-				if item.title.include?(trimmedListEntry) or
-						item.description.include?(trimmedListEntry)
-					found = true
+				if item.title 
+					if item.title.include?(trimmedListEntry)
+						found = true
+					end
+				end
+				if item.description
+					if item.description.include?(trimmedListEntry)
+						found = true
+					end
 				end
 			end
 			if not found
