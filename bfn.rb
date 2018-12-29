@@ -218,23 +218,37 @@ newsItems = Hash.new
 filter = RSSFilter.new(FILTERLIST_FILE)
 
 # Getting the news
+reallyDontCare = false
 feedinfo.feedinfo.each do |entry|
-	open(entry.url) do |rss|
-		feed = RSS::Parser.parse(rss, do_validate=false)
-		puts "Title: #{feed.channel.title}"
-		filteredItems = filter.filter(feed)
-		filteredItems.select{|x| showAll || (x.date > entry.date)}.each do |x|
-			puts "#{x.title}"
-			whatToDo = gets().chomp
-			
-			# Mark an article for reading
-			if whatToDo == "y"
-				newsItems[x] = entry
-			end
+	if reallyDontCare == false 
+		open(entry.url) do |rss|
+			feed = RSS::Parser.parse(rss, do_validate=false)
+			puts "Title: #{feed.channel.title}"
+			filteredItems = filter.filter(feed)
+			filteredItems.select{|x| showAll || (x.date > entry.date)}.each do |x|
+				puts "#{x.title}"
+				whatToDo = gets().chomp
 
-			# Quit the reader
-			if whatToDo == "q"
-				exit(0)
+				# Mark an article for reading
+				if whatToDo == "y"
+					newsItems[x] = entry
+				end
+
+				# Don't care about the rest
+				if whatToDo == "d"
+					break
+				end
+
+				# Really don't care
+				if whatToDo == "D"
+					reallyDontCare = true
+					break
+				end	
+
+				# Quit the reader
+				if whatToDo == "q"
+					exit(0)
+				end
 			end
 		end
 	end
