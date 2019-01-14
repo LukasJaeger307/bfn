@@ -33,7 +33,7 @@ that is used to extract the text. These news feeds are stored as YAML-files. Exa
 be found in the _feeds_ folder. In order to import these, execute BFN like this:
 
 ```sh
-./bfn.rb -i feeds/tagesschau.de.yaml
+./bfn -i feeds/tagesschau.de.yaml
 ```
 
 If you know your way around xpath and webdesign, you can instead
@@ -45,7 +45,7 @@ that contain these text snippets and create xpath-expressions to search for them
 done that, you execute BFN like this:
 
 ```sh
-./bfn.rb -c
+./bfn -c
 ```
 
 This opens the interactive news feed creation mode. You are first asked for the URL of the RSS
@@ -61,7 +61,7 @@ resulting xpath string is _//p[@class="text small"]_ and the name is _p_.
 You created your own news feed and want to share? Terrific! Just call
 
 ```sh
-./bfn.rb -e
+./bfn -e
 ```
 
 You are asked then which feed you want to export, you get to select a filename (which will be expanded by
@@ -73,7 +73,7 @@ can import it as described above.
 Call
 
 ```sh
-./bfn.rb 
+./bfn 
 ```
 
 and BFN will check your RSS feeds for update, ask you, what news you want to read (type `y` and Enter in that case)
@@ -84,7 +84,7 @@ The briefing mode works only on systems that can execute Unix' _less_-command. I
 systems, call
 
 ```sh
-./bfn.rb -b
+./bfn -b
 ```
 The briefing mode acts like the default mode except that it automatically opens _news.txt_ with Unix' _less_.
 
@@ -93,7 +93,7 @@ By default, BFN tracks the time you accessed your news feeds last and only displ
 after that point of time. If you want all the news in the feed, call
 
 ```sh
-./bfn.rb -a
+./bfn -a
 ```
 
 This can be combined with the briefing mode.
