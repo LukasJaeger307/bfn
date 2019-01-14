@@ -18,6 +18,14 @@ You need [nokogiri](http://www.nokogiri.org/tutorials/installing_nokogiri.html) 
 Follow the tutorial or search your Linux distribution's repositories. Now open a terminal,
 clone the repository and you're done installing.
 
+### Installing on systems with Ruby versions earlier than 2.4 ###
+If you use a system with an ancient version of Ruby (e.g. my beloved Debian), you need the `debian` branch of BFN.
+Check it out with
+
+```sh
+git checkout debian
+```
+
 ## Using BFN ##
 ### Importing news feeds ###
 In BFN news feeds are objects that store the URL of the RSS index and some xpath information
@@ -68,8 +76,8 @@ Call
 ./bfn.rb 
 ```
 
-and BFN will check your RSS feeds for update, ask you, what news you want to read, extract the text from
-all of them and write it to _news.txt_.
+and BFN will check your RSS feeds for update, ask you, what news you want to read (type `y` and Enter in that case)
+, extract the text from all of them and write it to _news.txt_.
 
 #### Briefing mode (Unix only) ####
 The briefing mode works only on systems that can execute Unix' _less_-command. If you have one of these
@@ -89,3 +97,16 @@ after that point of time. If you want all the news in the feed, call
 ```
 
 This can be combined with the briefing mode.
+
+#### Don't care about the rest ####
+If you select the articles important for you and think "Meh, I don't care about the rest of that news source",
+just type `d` and enter and BFN will go to the next news source. If you think "Meh, I don't care about all of
+these sources", just type `D` and Enter.
+
+### Updating the date of the news sources without reading them ###
+If you don't want to read the sources but don't care about the articles you can skip them all by updating the date of
+the last access:
+
+```sh
+./bfn -u
+```
