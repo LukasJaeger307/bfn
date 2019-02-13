@@ -78,8 +78,8 @@ briefing = false
 # Wumbo
 wumbo = false
 
-# Invisible briefing mode
-invisible = false
+# Stealth briefing mode
+stealth = false
 
 # Function that makes the user select a feed interactively
 def selectFeed(feedinfo)
@@ -213,10 +213,10 @@ OptionParser.new do |parser|
 		exit(0)
 	end
 
-	# Invisible briefing mode
-	parser.on("-i", "--invisible",
+	# Stealth briefing mode
+	parser.on("-s", "--stealth",
 						"Like briefing mode but deletes news.txt after lessing it") do
-		invisible = true
+		stealth = true
 	end
 
 end.parse!
@@ -282,12 +282,12 @@ end
 storeFeedinfo(feedinfo)
 
 # If briefing mode is active, open news.txt with less
-if briefing == true  or invisible == true
+if briefing == true  or stealth == true
 	system("less news.txt")
 end
 
-# Deleting news.txt if invisible mode was selected
-if invisible == true
+# Deleting news.txt if stealth mode was selected
+if stealth == true
 	if File.exists?("news.txt")
 		File.delete("news.txt")
 	end
