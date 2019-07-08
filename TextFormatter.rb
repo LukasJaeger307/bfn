@@ -21,4 +21,34 @@ class TextFormatter
    @linelength = linelength
   end
 
+  def format (textlines)
+    formattedlines = Array.new
+    buffer = textlines.shift
+
+    while not buffer.empty?
+      bufferlength = buffer.length
+      if bufferlength < @linelength
+        # Buffer is small enough, it gets appended to the formtatted lines
+        formattedlines.append(buffer)
+        buffer = ""
+      elsif breakindex = buffer.index('\n', @linelength)
+        # TODO: Do something about linebreaks
+      else
+        breakindex = buffer.rindex(' ', @linelength)
+        if breakindex == nil or breakindex == 0
+          # Could not find a blank, we just break at linelength
+          breakindex = @linelength
+        end
+        formattedlines.append(buffer[0..breakindex].strip!)
+        buffer = buffer[breakindex..bufferlength]
+      end
+      # Appends the next line to the buffer if any are left
+      if not textlines.empty?
+        buffer = buffer + textlines.shift
+      end
+    end
+
+    formattedlines
+  end
+
 end

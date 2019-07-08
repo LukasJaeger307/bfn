@@ -32,8 +32,11 @@ require_relative 'FeedCreator'
 # Requires Webpage loader
 require_relative 'WebpageLoader'
 
-#Requires word filter
+# Requires word filter
 require_relative 'RSSFilter'
+
+# Requires text formatter
+require_relative 'TextFormatter'
 
 SETTINGS_FOLDER = Dir.home() + "/.bfn"
 FEEDINFO_FILE = SETTINGS_FOLDER + "/feedinfo.yaml"
@@ -272,9 +275,13 @@ end
 File.open("news.txt", "w") do |file|
 	newsItems.each do |item, feedinfo|
 		loader = WebpageLoader.new(item.link)
-		loader.load(feedinfo).each do |line|
-			file.write(line)
-		end
+		lines = loader.load(feedinfo)			
+    formatter = TextFormatter.new(80)
+    formattedlines = formatter.format(lines)
+    formattedlines.each do |line|
+      file.write(line)
+      file.write("\n")
+    end
 	end
 end
 

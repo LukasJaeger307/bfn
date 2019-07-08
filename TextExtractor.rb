@@ -29,18 +29,20 @@ class TextExtractor
 		text = Array.new
 		paragraphs.each do |paragraph|
 			if paragraph.name == feedinfo.articleTitle.name
-				text.push("# ")
+        headline = "# "
 				paragraph.children.each do |child|
 					strippedText = child.text.strip
 					if not strippedText.empty?
-						text.push(child.text.strip + " ")
+            headline = headline + child.text.strip.gsub("\n", " ") + " "
 					end
 				end
-				text.push("#\n\n")
+				headline = headline + "#"
+        text.push(headline)
+        text.push ("\n")
 			# Sub-headline found
 			elsif paragraph.name == feedinfo.sectionTitle.name
 				paragraph.children.each do |child|
-					strippedText = child.text.strip
+          strippedText = child.text.strip.gsub("\n", " ")
 					if strippedText != nil
 						text.push("## " + strippedText + " ##")
 					end
