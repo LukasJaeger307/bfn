@@ -42,7 +42,7 @@ class TextExtractor
 			# Sub-headline found
 			elsif paragraph.name == feedinfo.sectionTitle.name
 				paragraph.children.each do |child|
-          strippedText = child.text.strip.gsub("\n", " ")
+          strippedText = child.text.strip
 					if strippedText != nil
 						text.push("## " + strippedText + " ##")
 					end
@@ -52,12 +52,16 @@ class TextExtractor
 			elsif paragraph.name == feedinfo.paragraph.name
 				paragraph.children.each do |child|
 					strippedText = child.text.strip
-					if not strippedText.empty?
-						text.push(strippedText)
-						text.push(" ")
-					end
+          if strippedText
+					  if not strippedText.empty?
+						  text.push(strippedText)
+						  text.push("\n")
+					  end
+          else
+            text.push(child.text)
+          end
 				end
-				text.push("\n\n")
+				text.push("\n")
 			end
 		end
 		text.push("\n\n")

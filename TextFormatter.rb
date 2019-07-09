@@ -37,6 +37,13 @@ class TextFormatter
         end
         buffer = ""
       else
+        # Filter out triple linebreaks because they are yucky
+        while buffer.index("\n\n\n")
+          subBuffer = buffer.gsub("\n\n\n", "\n\n")
+          if subBuffer
+            buffer = subBuffer
+          end
+        end
         # Need to detect linebreaks in the buffer, they need special treatment
         breakindex = buffer.index("\n")
         if (breakindex != nil) and (breakindex < @linelength)

@@ -265,14 +265,20 @@ feedinfo.feedinfo.each do |entry|
             newsItems[previousItem] = previousEntry
           end
 
+          # Add the previous and the current element
+          if (whatToDo == "b") and previousItem and previousEntry
+            newsItems[x] = entry
+            newsItems[previousItem] = previousEntry
+          end
+
 					# Quit the reader
 					if whatToDo == "q"
 						exit(0)
 					end
 
           # Record the previous item
-          #previousItem = x
-          #previousEntry = entry
+          previousItem = x
+          previousEntry = entry
 				end
 			end
 		rescue
@@ -293,6 +299,7 @@ File.open("news.txt", "w") do |file|
       file.write(line)
       file.write("\n")
     end
+    file.write("\n")
 	end
 end
 

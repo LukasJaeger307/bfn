@@ -88,6 +88,10 @@ systems, call
 ```
 The briefing mode acts like the default mode except that it automatically opens _news.txt_ with Unix' _less_.
 
+#### Stealth mode ####
+The stealth mode is basically like the briefing mode but _news.txt_ is deleted
+after reading.
+
 #### All entries ####
 By default, BFN tracks the time you accessed your news feeds last and only displays you news that were published
 after that point of time. If you want all the news in the feed, call
@@ -98,10 +102,16 @@ after that point of time. If you want all the news in the feed, call
 
 This can be combined with the briefing mode.
 
-#### Don't care about the rest ####
-If you select the articles important for you and think "Meh, I don't care about the rest of that news source",
-just type `d` and enter and BFN will go to the next news source. If you think "Meh, I don't care about all of
-these sources", just type `D` and Enter.
+#### Navigation witin bfn ####
+For each entry, the following options are offered to you:
+
+* `y` adds an entry to the list of entries you want to read
+* `d` tells bfn that all remaining entries in this newsfeed are not interesting
+  for you
+* `D` tells bfn that none of the remaining entries are interesting for you
+* `p` marks the previous entry for reading 
+* `b` marks both the previous and the current entry for reading
+* `a` aborts bfn
 
 ### Updating the date of the news sources without reading them ###
 If you don't want to read the sources but don't care about the articles you can skip them all by updating the date of
