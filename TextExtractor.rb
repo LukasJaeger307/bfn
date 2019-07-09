@@ -33,7 +33,7 @@ class TextExtractor
 				paragraph.children.each do |child|
 					strippedText = child.text.strip
 					if not strippedText.empty?
-            headline = headline + child.text.strip.gsub("\n", " ") + " "
+            headline = headline + child.text + " "
 					end
 				end
 				headline = headline + "#"

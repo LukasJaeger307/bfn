@@ -231,6 +231,8 @@ filter = RSSFilter.new(FILTERLIST_FILE)
 
 # Getting the news
 reallyDontCare = false
+previousItem = nil
+previousEntry = nil
 feedinfo.feedinfo.each do |entry|
 	if reallyDontCare == false 
 		begin
@@ -258,10 +260,19 @@ feedinfo.feedinfo.each do |entry|
 						break
 					end	
 
+          # Add the previous element
+          if (whatToDo == "p") and previousItem and previousEntry
+            newsItems[previousItem] = previousEntry
+          end
+
 					# Quit the reader
 					if whatToDo == "q"
 						exit(0)
 					end
+
+          # Record the previous item
+          #previousItem = x
+          #previousEntry = entry
 				end
 			end
 		rescue

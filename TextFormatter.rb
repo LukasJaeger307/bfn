@@ -29,13 +29,22 @@ class TextFormatter
       bufferlength = buffer.length
       if bufferlength < @linelength
         # Buffer is small enough, it gets appended to the formtatted lines
-        formattedlines.append(buffer.strip!)
+        
+        if strippedbuffer = buffer.strip
+          formattedlines.append(strippedbuffer)
+        else
+          formattedlines.append(buffer)
+        end
         buffer = ""
       else
         # Need to detect linebreaks in the buffer, they need special treatment
         breakindex = buffer.index("\n")
         if (breakindex != nil) and (breakindex < @linelength)
-          formattedlines.append(buffer[0..breakindex].strip!)
+          if strippedbuffer = buffer[0..breakindex].strip
+            formattedlines.append(strippedbuffer)
+          else
+            formattedlines.append(buffer[0..breakindex])
+          end
           buffer = buffer[breakindex + 1..bufferlength]
         else
           # No linebreak, we just break at an opportune point after a blank
@@ -44,7 +53,11 @@ class TextFormatter
             # Could not find a blank, we just break at linelength
             breakindex = @linelength
           end
-          formattedlines.append(buffer[0..breakindex].strip!)
+          if strippedbuffer = buffer[0..breakindex].strip
+            formattedlines.append(strippedbuffer)
+          else
+            formattedlines.append(buffer[0..breakindex])
+          end
           buffer = buffer[breakindex..bufferlength]
         end
       end
