@@ -45,31 +45,31 @@ FILTERLIST_FILE = SETTINGS_FOLDER + "/filterlist"
 # Checking, whether or not we have a settings folder.
 # If we don't have one, we create one.
 if not File.exist?(SETTINGS_FOLDER)
-	Dir.mkdir(SETTINGS_FOLDER)
+  Dir.mkdir(SETTINGS_FOLDER)
 end
 
 # Checking, whether or not the feedinfo-file is available.
 # If it is not, it is created.
 if not File.exist?(FEEDINFO_FILE)
-	File.open(FEEDINFO_FILE, "w"){}
+  File.open(FEEDINFO_FILE, "w"){}
 end
 
 # Doing the same thing for the filter list
 if not File.exist?(FILTERLIST_FILE)
-	File.open(FILTERLIST_FILE, "w"){}
+  File.open(FILTERLIST_FILE, "w"){}
 end
 
 # De-Serializing feedinfo from the feedinfo-file
 begin
-	feedinfo = YAML.load(File.read(FEEDINFO_FILE))
+  feedinfo = YAML.load(File.read(FEEDINFO_FILE))
 rescue
-	puts("Feedinfo file was damaged. Aborting")
-	exit(1)
+  puts("Feedinfo file was damaged. Aborting")
+  exit(1)
 end
 
 # Checking for an empty file
 if feedinfo == false
-	feedinfo = Feedinfo.new
+  feedinfo = Feedinfo.new
 end
 
 # Sets whether or not all entries of a feed are shown
@@ -86,141 +86,141 @@ stealth = false
 
 # Function that makes the user select a feed interactively
 def selectFeed(feedinfo)
-	counter = 0
-	entryArray = Array.new
-	
-	# Prints a list of all feeds
-	feedinfo.feedinfo.each do |entry|
-		puts (counter.to_s + " : " + entry.to_s)
-		entryArray.push(entry)
-		counter = counter + 1
-	end
-	
-	# Gets the feed
-	selection = gets.chomp.to_i
-	if selection >= entryArray.size or selection < 0
-		# No feed found, returning nil
-		return nil
-	else
-		entryArray.at(selection)
-	end
+  counter = 0
+  entryArray = Array.new
+
+  # Prints a list of all feeds
+  feedinfo.feedinfo.each do |entry|
+    puts (counter.to_s + " : " + entry.to_s)
+    entryArray.push(entry)
+    counter = counter + 1
+  end
+
+  # Gets the feed
+  selection = gets.chomp.to_i
+  if selection >= entryArray.size or selection < 0
+    # No feed found, returning nil
+    return nil
+  else
+    entryArray.at(selection)
+  end
 end
 
 # Stores the feedinfo file in the home folder
 def storeFeedinfo(feedinfo)
-	# Serializing and storing feedinfo before end
-	File.open(FEEDINFO_FILE, "w") do |file|
-		file.puts(feedinfo.to_yaml)
-	end
+  # Serializing and storing feedinfo before end
+  File.open(FEEDINFO_FILE, "w") do |file|
+    file.puts(feedinfo.to_yaml)
+  end
 end
 
 # Parsing command line options
 OptionParser.new do |parser|
-	parser.banner = "Usage: bfn.rb [options]"
+  parser.banner = "Usage: bfn.rb [options]"
 
-	# Creating a new source interactively
-	parser.on("-c", "--create",
-						"Creates a new source in interactive mode") do
-		feedinfo.addEntry(FeedCreator.new.create())
-		storeFeedinfo(feedinfo)
-		exit(0)
-	end
-	
-	# Removing an URL from feedinfo
-	parser.on("-r", "--remove",
-					 "Removes an RSS-feed you may select from the list") do
-		puts "Insert the number of the source you wish to remove:"
-		selection = selectFeed(feedinfo)
-		if selection == nil
-			puts "You can't select that number, moron!"
-			exit(1)
-		else
-			feedinfo.deleteEntry(selection)
-		end
-		storeFeedinfo(feedinfo)
-		exit(0)
-	end
-	
-	# Exporting a news feed
-	parser.on("-e", "--export",
-						"Exports a news source") do
-		puts "Insert the number of the source you wish to export:"
-		selection = selectFeed(feedinfo)
-		if selection == nil
-			puts "You can't select that number, moron!"
-			exit(1)
-		else
-			puts "Give me a feed name"
-			feedname = gets().chomp!
-			filename = feedname + ".yaml"
-			File.open(filename, "w") do |file|
-				file.puts(selection.to_yaml)
-			end
-		end
-		exit(0)
-	end
+  # Creating a new source interactively
+  parser.on("-c", "--create",
+            "Creates a new source in interactive mode") do
+    feedinfo.addEntry(FeedCreator.new.create())
+    storeFeedinfo(feedinfo)
+    exit(0)
+  end
 
-	# Importing a news feed
-	parser.on("-i", "--import FILENAME",
-					"Imports a news feed") do |filename|
-		if not File.exist?(filename)
-			puts("Could not find file")
-			exit(1)
-		end
-		begin
-			feed = YAML.load(File.read(filename))
-			feedinfo.addEntry(feed)
-		rescue
-			puts("Could not serialize file")
-		end
-		storeFeedinfo(feedinfo)
-		exit(0)
-	end
+  # Removing an URL from feedinfo
+  parser.on("-r", "--remove",
+            "Removes an RSS-feed you may select from the list") do
+    puts "Insert the number of the source you wish to remove:"
+    selection = selectFeed(feedinfo)
+    if selection == nil
+      puts "You can't select that number, moron!"
+      exit(1)
+    else
+      feedinfo.deleteEntry(selection)
+    end
+    storeFeedinfo(feedinfo)
+    exit(0)
+  end
 
-	# Listing all entries in feedinfo
-	parser.on("-l", "--list",
-						"Lists all news sources") do
-		feedinfo.feedinfo.each do |x|
-			puts x.to_s
-		end
-		exit(0)
-	end
+  # Exporting a news feed
+  parser.on("-e", "--export",
+            "Exports a news source") do
+    puts "Insert the number of the source you wish to export:"
+    selection = selectFeed(feedinfo)
+    if selection == nil
+      puts "You can't select that number, moron!"
+      exit(1)
+    else
+      puts "Give me a feed name"
+      feedname = gets().chomp!
+      filename = feedname + ".yaml"
+      File.open(filename, "w") do |file|
+        file.puts(selection.to_yaml)
+      end
+    end
+    exit(0)
+  end
 
-	# Listing all news in all feeds
-	parser.on("-a", "--all",
-						"Shows all RSS entries") do
-		showAll = true
-	end
+  # Importing a news feed
+  parser.on("-i", "--import FILENAME",
+            "Imports a news feed") do |filename|
+    if not File.exist?(filename)
+      puts("Could not find file")
+      exit(1)
+    end
+    begin
+      feed = YAML.load(File.read(filename))
+      feedinfo.addEntry(feed)
+    rescue
+      puts("Could not serialize file")
+    end
+    storeFeedinfo(feedinfo)
+    exit(0)
+  end
 
-	# Briefing mode opens the news with less
-	parser.on("-b", "--briefing",
-						"Briefing mode: Opens news.txt with Unix' less") do
-		briefing = true
-	end
-	
-	# Wumbo
-	parser.on("-w", "--wumbo",
-						"Wumbo") do
-		puts("Patrick, I don't think, wumbo is a real word...")
-		exit(0)
-	end	
+  # Listing all entries in feedinfo
+  parser.on("-l", "--list",
+            "Lists all news sources") do
+    feedinfo.feedinfo.each do |x|
+      puts x.to_s
+    end
+    exit(0)
+  end
 
-	# Update
-	parser.on("-u", "--update",
-						"Just updates the date of last access for all sources") do
+  # Listing all news in all feeds
+  parser.on("-a", "--all",
+            "Shows all RSS entries") do
+    showAll = true
+  end
 
-		feedinfo.feedinfo.each do |entry|
-			entry.date = Time.now
-		end
-		storeFeedinfo(feedinfo)
-		exit(0)
-	end
+  # Briefing mode opens the news with less
+  parser.on("-b", "--briefing",
+            "Briefing mode: Opens news.txt with Unix' less") do
+    briefing = true
+  end
 
-	# Stealth briefing mode
-	parser.on("-s", "--stealth",
-						"Like briefing mode but deletes news.txt after lessing it") do
-		stealth = true
-	end
+  # Wumbo
+  parser.on("-w", "--wumbo",
+            "Wumbo") do
+    puts("Patrick, I don't think, wumbo is a real word...")
+    exit(0)
+  end	
+
+  # Update
+  parser.on("-u", "--update",
+            "Just updates the date of last access for all sources") do
+
+    feedinfo.feedinfo.each do |entry|
+      entry.date = Time.now
+    end
+    storeFeedinfo(feedinfo)
+    exit(0)
+  end
+
+  # Stealth briefing mode
+  parser.on("-s", "--stealth",
+            "Like briefing mode but deletes news.txt after lessing it") do
+    stealth = true
+  end
 
 end.parse!
 
@@ -234,31 +234,31 @@ reallyDontCare = false
 previousItem = nil
 previousEntry = nil
 feedinfo.feedinfo.each do |entry|
-	if reallyDontCare == false 
-		begin
-			open(entry.url) do |rss|
-				feed = RSS::Parser.parse(rss, do_validate=false)
-				puts "Title: #{feed.channel.title}"
-				filteredItems = filter.filter(feed)
-				filteredItems.select{|x| showAll || (x.date > entry.date)}.each do |x|
-					puts "#{x.title}"
-					whatToDo = gets().chomp
+  if reallyDontCare == false 
+    begin
+      open(entry.url) do |rss|
+        feed = RSS::Parser.parse(rss, do_validate=false)
+        puts "Title: #{feed.channel.title}"
+        filteredItems = filter.filter(feed)
+        filteredItems.select{|x| showAll || (x.date > entry.date)}.each do |x|
+          puts "#{x.title}"
+          whatToDo = gets().chomp
 
-					# Mark an article for reading
-					if whatToDo == "y"
-						newsItems[x] = entry
-					end
+          # Mark an article for reading
+          if whatToDo == "y"
+            newsItems[x] = entry
+          end
 
-					# Don't care about the rest
-					if whatToDo == "d"
-						break
-					end
+          # Don't care about the rest
+          if whatToDo == "d"
+            break
+          end
 
-					# Really don't care
-					if whatToDo == "D"
-						reallyDontCare = true
-						break
-					end	
+          # Really don't care
+          if whatToDo == "D"
+            reallyDontCare = true
+            break
+          end	
 
           # Add the previous element
           if (whatToDo == "p") and previousItem and previousEntry
@@ -271,28 +271,28 @@ feedinfo.feedinfo.each do |entry|
             newsItems[previousItem] = previousEntry
           end
 
-					# Quit the reader
-					if whatToDo == "q"
-						exit(0)
-					end
+          # Quit the reader
+          if whatToDo == "q"
+            exit(0)
+          end
 
           # Record the previous item
           previousItem = x
           previousEntry = entry
-				end
-			end
-		rescue
-			puts("Could not find URL " + entry.url + ". Skipping this source")
-		end
-	end
-	entry.date = Time.now
+        end
+      end
+    rescue
+      puts("Could not find URL " + entry.url + ". Skipping this source")
+    end
+  end
+  entry.date = Time.now
 end
 
 # Printing them
 File.open("news.txt", "w") do |file|
-	newsItems.each do |item, feedinfo|
-		loader = WebpageLoader.new(item.link)
-		lines = loader.load(feedinfo)			
+  newsItems.each do |item, feedinfo|
+    loader = WebpageLoader.new(item.link)
+    lines = loader.load(feedinfo)			
     formatter = TextFormatter.new(80)
     formattedlines = formatter.format(lines)
     formattedlines.each do |line|
@@ -300,7 +300,7 @@ File.open("news.txt", "w") do |file|
       file.write("\n")
     end
     file.write("\n")
-	end
+  end
 end
 
 # Storing the feedinfo before the program ends
@@ -308,13 +308,13 @@ storeFeedinfo(feedinfo)
 
 # If briefing mode is active, open news.txt with less
 if briefing == true  or stealth == true
-	system("less news.txt")
+  system("less news.txt")
 end
 
 # Deleting news.txt if stealth mode was selected
 if stealth == true
-	if File.exists?("news.txt")
-		File.delete("news.txt")
-	end
+  if File.exists?("news.txt")
+    File.delete("news.txt")
+  end
 end
 
