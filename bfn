@@ -327,6 +327,10 @@ end
 
 # Storing the feedinfo before the program ends
 storeFeedinfo(feedinfo)
+  
+File.open(CONFIG_FILE, "w") do |file|
+  file.puts(config.to_yaml)
+end
 
 # If briefing mode is active, open news.txt with less
 if briefing == true  or stealth == true

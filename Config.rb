@@ -21,4 +21,8 @@ class Config
     @linelength = linelength
   end
 
+  def linelength()
+    @linelength
+  end
+
 end
