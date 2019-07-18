@@ -38,7 +38,11 @@ require_relative 'RSSFilter'
 # Requires text formatter
 require_relative 'TextFormatter'
 
+# Requires Config type
+require_relative 'Config'
+
 SETTINGS_FOLDER = Dir.home() + "/.bfn"
+CONFIG_FILE = SETTINGS_FOLDER + "/config.yaml"
 FEEDINFO_FILE = SETTINGS_FOLDER + "/feedinfo.yaml"
 FILTERLIST_FILE = SETTINGS_FOLDER + "/filterlist"
 
@@ -59,6 +63,11 @@ if not File.exist?(FILTERLIST_FILE)
   File.open(FILTERLIST_FILE, "w"){}
 end
 
+# Doing the same thing for the config file
+if not File.exist?(CONFIG_FILE)
+  File.open(CONFIG_FILE, "w"){}
+end
+
 # De-Serializing feedinfo from the feedinfo-file
 begin
   feedinfo = YAML.load(File.read(FEEDINFO_FILE))
@@ -70,6 +79,19 @@ end
 # Checking for an empty file
 if feedinfo == false
   feedinfo = Feedinfo.new
+end
+
+# De-Serializing config from the config file
+begin
+  config = YAML.load(File.read(CONFIG_FILE))
+rescue
+  puts("Config file was damaged. Aborting")
+  exit(1)
+end
+
+# Checking for an empty file
+if config == false
+  config = Config.new(80)
 end
 
 # Sets whether or not all entries of a feed are shown
@@ -293,7 +315,7 @@ File.open("news.txt", "w") do |file|
   newsItems.each do |item, feedinfo|
     loader = WebpageLoader.new(item.link)
     lines = loader.load(feedinfo)			
-    formatter = TextFormatter.new(80)
+    formatter = TextFormatter.new(config.linelength)
     formattedlines = formatter.format(lines)
     formattedlines.each do |line|
       file.write(line)
