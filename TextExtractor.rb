@@ -20,52 +20,52 @@ require 'nokogiri'
 
 class TextExtractor
 
-	def extract (doc, feedinfo)
-		xpathString = feedinfo.articleTitle.xpath + " | " +
-			feedinfo.sectionTitle.xpath + " | " +
-			feedinfo.paragraph.xpath
+  def extract (doc, feedinfo)
+    xpathString = feedinfo.articleTitle.xpath + " | " +
+      feedinfo.sectionTitle.xpath + " | " +
+      feedinfo.paragraph.xpath
 
-		paragraphs = doc.xpath(xpathString)
-		text = Array.new
-		paragraphs.each do |paragraph|
-			if paragraph.name == feedinfo.articleTitle.name
+    paragraphs = doc.xpath(xpathString)
+    text = Array.new
+    paragraphs.each do |paragraph|
+      if paragraph.name == feedinfo.articleTitle.name
         headline = "# "
-				paragraph.children.each do |child|
-					strippedText = child.text.strip
-					if not strippedText.empty?
+        paragraph.children.each do |child|
+          strippedText = child.text.strip
+          if not strippedText.empty?
             headline = headline + child.text + " "
-					end
-				end
-				headline = headline + "#"
+          end
+        end
+        headline = headline + "#"
         text.push(headline)
         text.push ("\n")
-			# Sub-headline found
-			elsif paragraph.name == feedinfo.sectionTitle.name
-				paragraph.children.each do |child|
+        # Sub-headline found
+      elsif paragraph.name == feedinfo.sectionTitle.name
+        paragraph.children.each do |child|
           strippedText = child.text.strip
-					if strippedText != nil
-						text.push("## " + strippedText + " ##")
-					end
-				end
-				text.push("\n\n")
-			# Paragraph found
-			elsif paragraph.name == feedinfo.paragraph.name
-				paragraph.children.each do |child|
-					strippedText = child.text.strip
+          if strippedText != nil
+            text.push("\n")
+            text.push("## " + strippedText + " ##")
+          end
+        end
+        text.push("\n\n")
+        # Paragraph found
+      elsif paragraph.name == feedinfo.paragraph.name
+        paragraph.children.each do |child|
+          strippedText = child.text.strip
           if strippedText
-					  if not strippedText.empty?
-						  text.push(strippedText)
-						  text.push("\n")
-					  end
+            if not strippedText.empty?
+              text.push(strippedText)
+            end
           else
             text.push(child.text)
           end
-				end
-				text.push("\n")
-			end
-		end
-		text.push("\n\n")
-		text
-	end
+        end
+        text.push("\n")
+      end
+    end
+    text.push("\n\n")
+    text
+  end
 end
 
