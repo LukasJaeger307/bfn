@@ -267,28 +267,28 @@ feedinfo.feedinfo.each do |entry|
           whatToDo = gets().chomp
 
           # Mark an article for reading
-          if whatToDo == "y"
+          if whatToDo == "y" or whatToDo == "+"
             newsItems[x] = entry
           end
 
           # Don't care about the rest
-          if whatToDo == "d"
+          if whatToDo == "d" or whatToDo == "-"
             break
           end
 
           # Really don't care
-          if whatToDo == "D"
+          if whatToDo == "D" or whatToDo == "/"
             reallyDontCare = true
             break
           end	
 
           # Add the previous element
-          if (whatToDo == "p") and previousItem and previousEntry
+          if (whatToDo == "p" or whatToDo == "*") and previousItem and previousEntry
             newsItems[previousItem] = previousEntry
           end
 
           # Add the previous and the current element
-          if (whatToDo == "b") and previousItem and previousEntry
+          if (whatToDo == "b" or whatToDo =="**") and previousItem and previousEntry
             newsItems[x] = entry
             newsItems[previousItem] = previousEntry
           end
