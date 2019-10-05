@@ -18,14 +18,6 @@ You need [nokogiri](http://www.nokogiri.org/tutorials/installing_nokogiri.html) 
 Follow the tutorial or search your Linux distribution's repositories. Now open a terminal,
 clone the repository and you're done installing.
 
-### Installing on systems with Ruby versions earlier than 2.4 ###
-If you use a system with an ancient version of Ruby (e.g. my beloved Debian), you need the `debian` branch of BFN.
-Check it out with
-
-```sh
-git checkout debian
-```
-
 ## Using BFN ##
 ### Importing news feeds ###
 In BFN news feeds are objects that store the URL of the RSS index and some xpath information
@@ -105,12 +97,12 @@ This can be combined with the briefing mode.
 #### Navigation witin bfn ####
 For each entry, the following options are offered to you:
 
-* `y` adds an entry to the list of entries you want to read
-* `d` tells bfn that all remaining entries in this newsfeed are not interesting
+* `y` or `+` adds an entry to the list of entries you want to read
+* `d` or `-` tells bfn that all remaining entries in this newsfeed are not interesting
   for you
-* `D` tells bfn that none of the remaining entries are interesting for you
-* `p` marks the previous entry for reading 
-* `b` marks both the previous and the current entry for reading
+* `D` or `/` tells bfn that none of the remaining entries are interesting for you
+* `p` or `*` marks the previous entry for reading 
+* `b` or `**` marks both the previous and the current entry for reading
 * `a` aborts bfn
 
 ### Updating the date of the news sources without reading them ###
