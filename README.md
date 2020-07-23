@@ -112,3 +112,13 @@ the last access:
 ```sh
 ./bfn -u
 ```
+
+### Configuring BFN for cloud usage ###
+If you use a cloud service like Nextcloud, SpiderOak or Dropbox, you can sync
+BFN's feed info over multiple devices so that you do not have to read the same
+articles over and over. Just go to your home folder, open the `.bfn` subfolder
+and `config.yaml` in it. Edit the line starting with `feedinfoFolder` such that
+it points to a directory that is synced in the cloud. Move the files
+`feedinfo.yaml` and `filterlist` over to that directory. Now adjust the
+`config.yaml` file the same way on all of your devices and your feedinfo will be
+synced.
