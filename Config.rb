@@ -17,12 +17,17 @@
 
 class Config
   
-  def initialize(linelength)
+  def initialize(linelength, feedinfoFolder=Dir.home + "/.bfn")
     @linelength = linelength
+    @feedinfoFolder = feedinfoFolder
   end
 
   def linelength()
     @linelength
+  end
+
+  def feedinfoFolder()
+    @feedinfoFolder
   end
 
 end

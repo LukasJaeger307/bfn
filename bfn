@@ -43,14 +43,28 @@ require_relative 'Config'
 
 SETTINGS_FOLDER = Dir.home() + "/.bfn"
 CONFIG_FILE = SETTINGS_FOLDER + "/config.yaml"
-FEEDINFO_FILE = SETTINGS_FOLDER + "/feedinfo.yaml"
-FILTERLIST_FILE = SETTINGS_FOLDER + "/filterlist"
 
 # Checking, whether or not we have a settings folder.
 # If we don't have one, we create one.
 if not File.exist?(SETTINGS_FOLDER)
   Dir.mkdir(SETTINGS_FOLDER)
 end
+
+# Doing the same thing for the config file
+if not File.exist?(CONFIG_FILE)
+  File.open(CONFIG_FILE, "w"){}
+end
+
+# De-Serializing config from the config file
+begin
+  config = YAML.load(File.read(CONFIG_FILE))
+rescue
+  puts("Config file was damaged. Aborting")
+  exit(1)
+end
+
+FEEDINFO_FILE = config.feedinfoFolder + "/feedinfo.yaml"
+FILTERLIST_FILE = config.feedinfoFolder + "/filterlist"
 
 # Checking, whether or not the feedinfo-file is available.
 # If it is not, it is created.
@@ -61,11 +75,6 @@ end
 # Doing the same thing for the filter list
 if not File.exist?(FILTERLIST_FILE)
   File.open(FILTERLIST_FILE, "w"){}
-end
-
-# Doing the same thing for the config file
-if not File.exist?(CONFIG_FILE)
-  File.open(CONFIG_FILE, "w"){}
 end
 
 # De-Serializing feedinfo from the feedinfo-file
@@ -79,14 +88,6 @@ end
 # Checking for an empty file
 if feedinfo == false
   feedinfo = Feedinfo.new
-end
-
-# De-Serializing config from the config file
-begin
-  config = YAML.load(File.read(CONFIG_FILE))
-rescue
-  puts("Config file was damaged. Aborting")
-  exit(1)
 end
 
 # Checking for an empty file
